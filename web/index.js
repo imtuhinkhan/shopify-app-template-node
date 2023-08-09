@@ -46,6 +46,21 @@ app.get("/api/products/count", async (_req, res) => {
   res.status(200).send(countData);
 });
 
+// Endpoint to retrieve products
+app.get("/api/products", async (_req, res) => {
+  try {
+    // Fetch products using the Shopify API
+    const products = await shopify.api.rest.Product.all({
+      session: res.locals.shopify.session,
+    });
+
+    // Send the list of products as a JSON response
+    res.status(200).json(products);
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    res.status(500).json({ error: "Error fetching products" });
+  }
+});
 app.get("/api/products/create", async (_req, res) => {
   let status = 200;
   let error = null;
